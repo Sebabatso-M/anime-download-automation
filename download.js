@@ -30,8 +30,4 @@ async function download(site) {
     }
 }
 
-function clickDownloadLink() {
-
-}
-
 download("https://www2.gogoanime.sh/diamond-ace-episode-1");
