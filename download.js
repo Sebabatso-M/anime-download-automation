@@ -12,16 +12,23 @@ async function download(site) {
     try {
 
         await page.goto(site);
-        
+
         let link = await page.$eval('.dowloads a', ele => ele.href);
 
         await page.goto(link);
 
-        await page.$$eval('div.mirror_link:nth-child(5) > .dowloads', arr => arr.map(i => i.firstChild.href));
 
+
+        let list = await page.$$eval('div.mirror_link:nth-child(5) > div', arr => arr.map(ele => ele.firstChild.href) );
+
+        console.log('Download links:\n', list);
 
     } catch (er) {
-        console.log(er);
+        if (er instanceof puppeteer.errors.TimeoutError) {
+            console.error('Network Error, please try again');
+        } else {
+            console.error(er);
+        }
     } finally {
         setTimeout(() => {
             browser.close();
@@ -30,4 +37,6 @@ async function download(site) {
     }
 }
 
-download("https://www2.gogoanime.sh/diamond-ace-episode-1");
+
+
+download("https://www2.gogoanime.sh/diamond-ace-episode-1").then(arr => console.log(arr));
